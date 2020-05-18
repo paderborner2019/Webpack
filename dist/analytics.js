@@ -148,23 +148,53 @@
 /******/
 /******/
 /******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["./analytics.js","vendors~analytics~main"]);
+/******/ 	deferredModules.push(["./analytics.ts","vendors~analytics~main"]);
 /******/ 	// run deferred modules when ready
 /******/ 	return checkDeferredModules();
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./analytics.js":
+/***/ "./analytics.ts":
 /*!**********************!*\
-  !*** ./analytics.js ***!
+  !*** ./analytics.ts ***!
   \**********************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ \"../node_modules/jquery/dist/jquery.js\");\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\nfunction createAnalytics() {\r\n    let counter = 0;\r\n    let isDestroyed = false;\r\n\r\n    const listener =() => counter++\r\n\r\n    jquery__WEBPACK_IMPORTED_MODULE_0__(document).on('click',listener)\r\n\r\n    return {\r\n        getClicked() {\r\n            if (isDestroyed) {\r\n                return `Analytics is destroyed Total clics =${counter}`\r\n            }\r\n            return counter\r\n        },\r\n\r\n        destroy() {\r\n            jquery__WEBPACK_IMPORTED_MODULE_0__(document).off('click',listener)\r\n            isDestroyed = true \r\n        }\r\n    }\r\n}\r\n\r\nwindow.analytics = createAnalytics()\n\n//# sourceURL=webpack:///./analytics.js?");
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function createAnalytics() {
+  var counter = 0;
+  var isDestroyed = false;
+
+  var listener = function listener() {
+    return counter++;
+  };
+
+  jquery__WEBPACK_IMPORTED_MODULE_0__(document).on('click', listener);
+  return {
+    getClicked: function getClicked() {
+      if (isDestroyed) {
+        return "Analytics is destroyed Total clics =".concat(counter);
+      }
+
+      return counter;
+    },
+    destroy: function destroy() {
+      jquery__WEBPACK_IMPORTED_MODULE_0__(document).off('click', listener);
+      isDestroyed = true;
+    }
+  };
+}
+
+window['analytics'] = createAnalytics();
 
 /***/ })
 
 /******/ });
+//# sourceMappingURL=analytics.js.map

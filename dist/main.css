@@ -9,6 +9,7 @@ body {
     padding-top: 2rem;
     max-width: 1000px;
     margin: 0 auto;
+    padding-bottom: 2rem;
 }
 
 h1 {
@@ -27,14 +28,26 @@ h1 {
 .code {
     color:brown
 }
-.body {
+.box {
   padding: 1rem;
   border-radius: 5px;
   margin-top: 1rem;
   border: 1px solid #ccc;
 }
-h2 {
+.box h2 {
   text-align: center;
   color: darkblue;
 }
 
+.card {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  border: 1px solid #ccc; }
+
+h2 {
+  text-align: center;
+  color: brown; }
+
+
+/*# sourceMappingURL=main.css.map*/

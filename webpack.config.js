@@ -24,6 +24,50 @@ const optimization = () => {
     return config
 }
 
+const babelOptions = preset => {
+    const opts = {
+        presets: [
+            '@babel/preset-env'
+        ],
+        plugins: [
+            "@babel/plugin-proposal-class-properties"
+        ]
+    }
+
+    if (preset) {
+        opts.presets.push(preset)
+    }
+    return opts
+}
+
+const cssLoader = extra => {
+    const loaders = [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                hmr : isDev,
+                reloadAll: true
+            }
+        },"css-loader"
+    ]
+    if (extra) {
+        loaders.push(extra)   
+    }
+    return loaders
+}
+
+const jsLoaders = () => {
+    const loaders = [{
+        loader: 'babel-loader',
+        options: babelOptions()
+    }]
+
+    if (isDev) {
+        loaders.push('eslint-loader')
+    }
+   return loaders
+} 
+
 const fileName = ext => isDev ?`[name].${ext}`: `[name].[hash].${ext}`
 
 console.log('isDev:', isDev)
@@ -31,8 +75,8 @@ module.exports = {
     context: path.resolve(__dirname,"src"),
     mode: 'development',
     entry: {
-        main:'./index.js',
-        analytics: "./analytics.js"
+        main:['@babel/polyfill','./index.jsx'],
+        analytics: "./analytics.ts"
     },
     output: {
         filename: fileName('js'),
@@ -68,28 +112,20 @@ module.exports = {
         //     }
         // ])
     ],
+    devtool: isDev ? 'source-map' : '',
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: [{
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                        hrm: isDev,
-                        reloadAll:true
-                    }
-                },'css-loader']
+                use: cssLoader()
             },
             {
                 test: /\.less$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hrm: isDev,
-                            reloadAll:true
-                    },
-                },'css-loader','less-loader']
+                use: cssLoader("less-loader")
+            },
+            {
+                test: /\.s[ac]ss$/,
+                use: cssLoader("sass-loader")
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,
@@ -102,6 +138,27 @@ module.exports = {
             {
                 test:/\.(xml)/,
                 use: ['xml-loader']
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: jsLoaders()
+            },
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                loader: {
+                    loader: 'babel-loader',
+                    options: babelOptions("@babel/preset-typescript")
+                }
+            },
+            {
+                test: /\.jsx$/,
+                exclude: /node_modules/,
+                loader: {
+                    loader: 'babel-loader',
+                    options: babelOptions("@babel/preset-react")
+                }
             }
         ]
     }
